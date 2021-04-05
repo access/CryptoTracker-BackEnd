@@ -31,15 +31,15 @@ namespace CryptocurrencyTracker.Controllers
         }
 
         // GET api/<CryptoItems>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        //[HttpGet("{id}")]
+        //public string Get(int id)
+        //{
+        //    return "value";
+        //}
 
         // POST api/<CryptoItems>
         [HttpPost]
-        public string Post([FromBody] string newTicker)
+        public async Task<string> Post([FromBody] string newTicker)
         {
             Debug.WriteLine("POST: " + newTicker);
             newTicker = newTicker.ToUpper();
@@ -48,7 +48,7 @@ namespace CryptocurrencyTracker.Controllers
                 // get info about new crypto
                 // get list of existings currencies
                 bool cryptoIsValid = false;
-                var allCryptos = _client.GetSymbols();
+                var allCryptos = await _client.GetSymbolsAsync();
 
                 //{"Symbol":"XTZ-USDT","baseCurrencySymbol":"XTZ","quoteCurrencySymbol":"USDT","MinTradeSize":1.50000000,"Precision":8,"Status":"ONLINE","CreatedAt":"2019-12-17T17:55:35.663Z","Notice":"","ProhibitedIn":[],"AssociatedTermsOfService":[]}
                 foreach (var item in allCryptos.Data)
@@ -61,7 +61,7 @@ namespace CryptocurrencyTracker.Controllers
                     Debug.WriteLine("Symbol is valid: " + newTicker);
                     // create item
                     var cryptoQueryString = newTicker + "-" + Config.CryptoBaseCurrency;
-                    var price = _client.GetTicker(cryptoQueryString);
+                    var price = await _client.GetTickerAsync(cryptoQueryString);
                     var newItem = new CryptoCurrencyItem()
                     {
                         ID = 0,
@@ -78,7 +78,7 @@ namespace CryptocurrencyTracker.Controllers
                     if (!cryptoExistsInDB)
                     {
                         _context.Add(newItem);
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
                         Debug.WriteLine($"Saved new crypto {JsonConvert.SerializeObject(newItem)}");
                     }
                     else { Debug.WriteLine("Duplicate DB entry: " + newTicker); }

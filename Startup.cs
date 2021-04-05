@@ -40,7 +40,7 @@ namespace CryptocurrencyTracker
 
             // background Service for update crypto values
             services.AddHostedService<UpdateCryptoService>();
-            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             // setup CORS for fetch requests
             services.AddCors();
@@ -53,32 +53,16 @@ namespace CryptocurrencyTracker
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                //app.UseDeveloperExceptionPage();
-                //app.UseSwagger();
-                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CryptocurrencyTracker v1"));
-            }
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             //global cors policy
             app.UseCors(x => x
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .SetIsOriginAllowed(origin => true) // allow any origin
-                                                    //.AllowAnyOrigin()
                 .AllowCredentials()); // allow credentials
-
-
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

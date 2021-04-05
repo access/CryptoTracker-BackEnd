@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Text.Json;
+using System.Diagnostics;
 
 namespace CryptocurrencyTracker.Controllers
 {
@@ -24,15 +25,21 @@ namespace CryptocurrencyTracker.Controllers
             return JsonConvert.SerializeObject(_valuesArray);
         }
 
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id}/{period}")]
+        public async Task<string> Get(int id, int period = 21600)
         {
-
+            Debug.WriteLine($"{id} : {period}");
+            var startDate = DateTime.Now.AddSeconds(-period);
             var _valuesArray = _context.CryptoCurrencyValues.ToList()
-                .Select(crypto => crypto).Where(c => c.CurrencyID == id);
+                //.Select(crypto => crypto)
+                .Where(crypto => crypto.CurrencyID == id)
+                .Where(crypto => crypto.HistoryDate >= startDate); // for setted period, default 6 hours = 21600 sec.
             foreach (var item in _valuesArray)
             {
-                var cc = _context.CryptoCurrencyItems.ToList().Select(crypto => crypto).Where(c => c.ID == item.CurrencyID).FirstOrDefault();
+                var cc = _context.CryptoCurrencyItems.ToList()
+                    //.Select(crypto => crypto)
+                    .Where(crypto => crypto.ID == item.CurrencyID)
+                    .FirstOrDefault();
                 item.CryptoName = cc.CryptoName;
             }
             return JsonConvert.SerializeObject(_valuesArray);

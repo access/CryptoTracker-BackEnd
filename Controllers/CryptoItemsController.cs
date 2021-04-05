@@ -21,7 +21,7 @@ namespace CryptocurrencyTracker.Controllers
 
         // GET: api/<CryptoItems>
         [HttpGet]
-        public string Get() // IEnumerable<string> Get()
+        public string Get()
         {
             // read DB
             var _currencyArray = _context.CryptoCurrencyItems.ToList().Select(crypto => crypto.CryptoName);

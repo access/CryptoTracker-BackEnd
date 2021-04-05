@@ -2,11 +2,6 @@
 using Bittrex.Net.Objects;
 using CryptoExchange.Net.Authentication;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CryptocurrencyTracker.Models
 {

@@ -1,15 +1,10 @@
 ﻿using CryptocurrencyTracker.Models;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net;
-using Bittrex.Net.Objects;
-using CryptoExchange.Net.Authentication;
-using CryptoExchange.Net.Logging;
-using System.IO;
 
 namespace CryptocurrencyTracker.Services
 {
@@ -17,11 +12,15 @@ namespace CryptocurrencyTracker.Services
     {
         private BittrexClient _client = new BittrexClient();
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken) => Task.Run(async () =>
         {
-            Timer _timer = new Timer(UpdateCryptoValues, null, 0, Config.DbUpdateCryptoValuesPeriodMiliSec);
-            return Task.CompletedTask;
-        }
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                // receive LastTradeRate in loop 
+                await Task.Delay(Config.DbUpdateCryptoValuesPeriodMiliSec, stoppingToken);
+                UpdateCryptoValues(null);
+            }
+        });
 
         async void UpdateCryptoValues(object state)
         {

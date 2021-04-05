@@ -1,20 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using CryptocurrencyTracker.Models;
 using CryptocurrencyTracker.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 
 
 namespace CryptocurrencyTracker
@@ -39,7 +32,7 @@ namespace CryptocurrencyTracker
             services.AddControllersWithViews().AddNewtonsoftJson();
 
             // background Service for update crypto values
-            services.AddHostedService<UpdateCryptoService>();
+            services.AddSingleton<IHostedService, UpdateCryptoService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             // setup CORS for fetch requests

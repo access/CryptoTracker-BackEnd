@@ -1,11 +1,9 @@
 ﻿using Bittrex.Net;
-using Bittrex.Net.Objects;
 using CryptocurrencyTracker.Models;
 using CryptocurrencyTracker.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,13 +27,6 @@ namespace CryptocurrencyTracker.Controllers
             var _currencyArray = _context.CryptoCurrencyItems.ToList().Select(crypto => crypto.CryptoName);
             return JsonConvert.SerializeObject(_context.CryptoCurrencyItems, new DecimalFormatConverter());
         }
-
-        // GET api/<CryptoItems>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
 
         // POST api/<CryptoItems>
         [HttpPost]
@@ -87,12 +78,6 @@ namespace CryptocurrencyTracker.Controllers
             // read DB & send new object list
             var _currencyArray = _context.CryptoCurrencyItems.ToList().Select(crypto => crypto);
             return JsonConvert.SerializeObject(_currencyArray, new DecimalFormatConverter());
-        }
-
-        // PUT api/<CryptoItems>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
         }
 
         // DELETE api/<CryptoItems>/5

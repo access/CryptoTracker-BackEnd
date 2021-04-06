@@ -24,7 +24,7 @@ namespace CryptocurrencyTracker.Controllers
         public string Get()
         {
             // read DB
-            var _currencyArray = _context.CryptoCurrencyItems.ToList().Select(crypto => crypto.CryptoName);
+            var currencyArray = _context.CryptoCurrencyItems.ToList().Select(crypto => crypto.CryptoName);
             return JsonConvert.SerializeObject(_context.CryptoCurrencyItems, new DecimalFormatConverter());
         }
 
@@ -76,8 +76,8 @@ namespace CryptocurrencyTracker.Controllers
                 }
             }
             // read DB & send new object list
-            var _currencyArray = _context.CryptoCurrencyItems.ToList().Select(crypto => crypto);
-            return JsonConvert.SerializeObject(_currencyArray, new DecimalFormatConverter());
+            var currencyArray = _context.CryptoCurrencyItems.ToList().Select(crypto => crypto);
+            return JsonConvert.SerializeObject(currencyArray, new DecimalFormatConverter());
         }
 
         // DELETE api/<CryptoItems>/5
@@ -96,8 +96,8 @@ namespace CryptocurrencyTracker.Controllers
             _context.SaveChanges();
 
             // read DB & send new object list
-            var _currencyArray = _context.CryptoCurrencyItems.ToList().Select(crypto => crypto);
-            return JsonConvert.SerializeObject(_currencyArray, new DecimalFormatConverter());
+            var currencyArray = _context.CryptoCurrencyItems.ToList().Select(crypto => crypto);
+            return JsonConvert.SerializeObject(currencyArray, new DecimalFormatConverter());
         }
     }
 }

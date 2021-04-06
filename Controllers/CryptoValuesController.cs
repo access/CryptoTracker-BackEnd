@@ -17,8 +17,8 @@ namespace CryptocurrencyTracker.Controllers
         public string Get()
         {
             // read DB
-            var _valuesArray = _context.CryptoCurrencyValues.ToList().Select(crypto => crypto);
-            return JsonConvert.SerializeObject(_valuesArray);
+            var valuesArray = _context.CryptoCurrencyValues.ToList().Select(crypto => crypto);
+            return JsonConvert.SerializeObject(valuesArray);
         }
 
         [HttpGet("{id}/{period}")]
@@ -26,17 +26,17 @@ namespace CryptocurrencyTracker.Controllers
         {
             Debug.WriteLine($"{id} : {period}");
             var startDate = DateTime.Now.AddSeconds(-period);
-            var _valuesArray = _context.CryptoCurrencyValues.ToList()
+            var valuesArray = _context.CryptoCurrencyValues.ToList()
                 .Where(crypto => crypto.CurrencyID == id)
                 .Where(crypto => crypto.HistoryDate >= startDate); // for setted period, default 6 hours = 21600 sec.
-            foreach (var item in _valuesArray)
+            foreach (var item in valuesArray)
             {
                 var cc = _context.CryptoCurrencyItems.ToList()
                     .Where(crypto => crypto.ID == item.CurrencyID)
                     .FirstOrDefault();
                 item.CryptoName = cc.CryptoName;
             }
-            return JsonConvert.SerializeObject(_valuesArray);
+            return JsonConvert.SerializeObject(valuesArray);
         }
     }
 }

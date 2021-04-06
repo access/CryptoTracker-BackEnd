@@ -18,18 +18,18 @@ namespace CryptocurrencyTracker.Services
             {
                 // receive LastTradeRate in loop 
                 await Task.Delay(Config.DbUpdateCryptoValuesPeriodMiliSec, stoppingToken);
-                UpdateCryptoValues(null);
+                UpdateCryptoValues();
             }
         });
 
-        async void UpdateCryptoValues(object state)
+        async void UpdateCryptoValues()
         {
             Debug.WriteLine(DateTime.Now.ToString() + " Updating Bittrex crypto...");
 
             // get all crypto items from DB table `CryptoCurrencyItems`
-            var _context = new CryptoTrackerDbContext(Config.DbConnectionOptions);
-            var _currencyArray = _context.CryptoCurrencyItems.ToList().Select(crypto => crypto);
-            foreach (var cryptoItem in _currencyArray)
+            var context = new CryptoTrackerDbContext(Config.DbConnectionOptions);
+            var currencyArray = context.CryptoCurrencyItems.ToList().Select(crypto => crypto);
+            foreach (var cryptoItem in currencyArray)
             {
                 if (cryptoItem.CryptoName != Config.CryptoBaseCurrency)
                 {
@@ -39,7 +39,7 @@ namespace CryptocurrencyTracker.Services
                     var value = price.Data.LastTradeRate;
                     // read and update DB
                     // get id of currency for adding values
-                    var CryptoID = _context.CryptoCurrencyItems.Where(crypto => crypto.CryptoName == cryptoItem.CryptoName).Select(c => c.ID).FirstOrDefault();
+                    var CryptoID = context.CryptoCurrencyItems.Where(crypto => crypto.CryptoName == cryptoItem.CryptoName).Select(c => c.ID).FirstOrDefault();
                     // add new value of current Cryptocurrency
                     CryptoCurrencyValue newValue = new CryptoCurrencyValue()
                     {
@@ -48,7 +48,7 @@ namespace CryptocurrencyTracker.Services
                         HistoryDate = DateTime.Now,
                         MarketValue = value
                     };
-                    _context.Add(newValue);
+                    context.Add(newValue);
 
                     // update tickers values
                     cryptoItem.TradeRateDate = DateTime.Now;
@@ -57,7 +57,7 @@ namespace CryptocurrencyTracker.Services
                 }
             }
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             Debug.WriteLine(DateTime.Now.ToString() + " Updated.");
         }
     }

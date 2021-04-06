@@ -9,7 +9,7 @@ namespace CryptocurrencyTracker.Models
     {
         public readonly static string DbConnectionString = @"Server=localhost\TEW_SQLEXPRESS; Database=CryptocurrencyTracker; Integrated Security=True;";
         public readonly static DbContextOptions<CryptoTrackerDbContext> DbConnectionOptions = new DbContextOptionsBuilder<CryptoTrackerDbContext>().UseSqlServer(DbConnectionString).Options;
-        public static int DbUpdateCryptoValuesPeriodMiliSec = 5000;
+        public static int DbUpdateCryptoValuesPeriodMiliSec = 30000;
         public readonly static string BittrexApiKey = "41d1acdd825c462aaeb8365a36ab5687";
         public readonly static string BittrexApiSecret = "be03e357232b4c56b37cefdbdaa89774";
         public readonly static string CryptoBaseCurrency = "BTC";
